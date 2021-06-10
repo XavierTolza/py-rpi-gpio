@@ -1,0 +1,2 @@
+class SimulatedGPIO(object):
+    pass
