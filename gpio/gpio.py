@@ -1,5 +1,5 @@
 from .pin import Pin
-from .controller import gpio as GPIO
+from .controller import gpio
 
 
 class GPIO(object):
@@ -17,4 +17,4 @@ class GPIO(object):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        GPIO.cleanup()
+        gpio.cleanup()
