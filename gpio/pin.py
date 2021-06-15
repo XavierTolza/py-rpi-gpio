@@ -31,15 +31,15 @@ class Pin(object):
 
     @property
     @assert_input
-    def value(self):
+    def value(self) -> bool:
         return GPIO.input(self.pin_id)
 
-    def read(self):
+    def read(self) -> bool:
         return self.value
 
     @value.setter
     @assert_output
-    def value(self, value):
+    def value(self, value: bool):
         GPIO.output(self.pin_id, value)
 
     @assert_input
