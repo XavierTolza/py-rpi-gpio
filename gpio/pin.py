@@ -34,6 +34,9 @@ class Pin(object):
     def value(self):
         return GPIO.input(self.pin_id)
 
+    def read(self):
+        return self.value
+
     @value.setter
     @assert_output
     def value(self, value):
