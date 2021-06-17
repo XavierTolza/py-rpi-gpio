@@ -5,6 +5,8 @@ from .decorators import assert_input, assert_output
 class Pin(object):
     INPUT = GPIO.IN
     OUTPUT = GPIO.OUT
+    FALLING = GPIO.FALLING
+    RISING = GPIO.RISING
 
     def __init__(self, gpio, pin_id):
         self.__gpio = gpio
