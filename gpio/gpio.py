@@ -3,6 +3,9 @@ from .controller import gpio
 
 
 class GPIO(object):
+    def __init__(self) -> None:
+        gpio.setmode(gpio.BOARD)
+
     def __getitem__(self, pin_id):
         return Pin(self, pin_id)
 
