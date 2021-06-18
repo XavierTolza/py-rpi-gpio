@@ -36,6 +36,9 @@ class Pin(object):
     def value(self) -> bool:
         return GPIO.input(self.pin_id)
 
+    def toggle(self) -> None:
+        GPIO.output(self.pin_id, 1-GPIO.input(self.pin_id))
+
     def read(self) -> bool:
         return self.value
 
@@ -59,7 +62,8 @@ class Pin(object):
 
     @assert_input
     def on_interrupt(self, event, callback, bouncetime=100, **kwargs):
-        GPIO.add_event_detect(self.pin_id, event, callback=callback, bouncetime=bouncetime, **kwargs)
+        GPIO.add_event_detect(
+            self.pin_id, event, callback=callback, bouncetime=bouncetime, **kwargs)
 
     def on_rising(self, *args, **kwargs):
         self.on_interrupt(GPIO.RISING, *args, **kwargs)
