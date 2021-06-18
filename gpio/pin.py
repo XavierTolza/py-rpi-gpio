@@ -11,10 +11,10 @@ class Pin(object):
     def __init__(self, gpio, pin_id):
         self.__gpio = gpio
         self.pin_id = pin_id
-        self.__direction = None
+        self._direction = None
 
     def setup(self, mode, *args, **kwargs):
-        self.__direction = mode
+        self._direction = mode
         GPIO.setup(self.pin_id, mode, *args, **kwargs)
 
     def set_input(self, **kwargs):

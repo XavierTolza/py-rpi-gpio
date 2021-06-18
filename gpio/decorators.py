@@ -8,7 +8,7 @@ class assert_mode(object):
 
     def __call__(self, f):
         def wrapper(s, *args, **kwargs):
-            if s.__direction != self.mode:
+            if s._direction != self.mode:
                 raise PinDirectionError(f"Your pin must be set in direction {self.mode} to call this method")
             return f(s, *args, **kwargs)
 
