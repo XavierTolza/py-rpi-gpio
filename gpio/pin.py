@@ -10,8 +10,12 @@ class Pin(object):
 
     def __init__(self, gpio, pin_id):
         self.__gpio = gpio
-        self.pin_id = pin_id
+        self._pin_id = pin_id
         self._direction = None
+
+    @property
+    def pin_id(self):
+        return self._pin_id
 
     def setup(self, mode, *args, **kwargs):
         self._direction = mode
