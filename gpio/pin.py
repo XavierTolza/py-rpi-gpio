@@ -2,14 +2,15 @@ from .controller import gpio as GPIO
 from .decorators import assert_input, assert_output
 
 
-class Pin(object):
+class GenericPin(object):
+    abstract = NotImplementedError("This method is abstract")
+
     INPUT = GPIO.IN
     OUTPUT = GPIO.OUT
     FALLING = GPIO.FALLING
     RISING = GPIO.RISING
 
-    def __init__(self, gpio, pin_id):
-        self.__gpio = gpio
+    def __init__(self, pin_id):
         self._pin_id = pin_id
         self._direction = None
 
@@ -19,7 +20,6 @@ class Pin(object):
 
     def setup(self, mode, *args, **kwargs):
         self._direction = mode
-        GPIO.setup(self.pin_id, mode, *args, **kwargs)
 
     def set_input(self, **kwargs):
         self.setup(self.INPUT, **kwargs)
@@ -29,7 +29,7 @@ class Pin(object):
 
     @property
     def direction(self):
-        return self.__direction
+        return self._direction
 
     @direction.setter
     def direction(self, value):
@@ -38,22 +38,30 @@ class Pin(object):
     @property
     @assert_input
     def value(self) -> bool:
-        return GPIO.input(self.pin_id)
+        raise self.abstract
 
-    def toggle(self) -> None:
-        GPIO.output(self.pin_id, 1-GPIO.input(self.pin_id))
-
-    def read(self) -> bool:
-        return self.value
+    @property
+    def inverted_value(self):
+        return self.invert_pin_level(self.value)
 
     @value.setter
     @assert_output
     def value(self, value: bool):
-        GPIO.output(self.pin_id, value)
+        raise self.abstract
+
+    @staticmethod
+    def invert_pin_level(value: bool):
+        return 1 - value
+
+    def toggle(self) -> None:
+        self.value = self.inverted_value
+
+    def read(self) -> bool:
+        return self.value
 
     @assert_input
     def wait(self, event):
-        GPIO.wait_for_edge(self.pin_id, event)
+        raise self.abstract
 
     def wait_falling(self):
         self.wait(GPIO.FALLING)
@@ -66,8 +74,7 @@ class Pin(object):
 
     @assert_input
     def on_interrupt(self, event, callback, bouncetime=100, **kwargs):
-        GPIO.add_event_detect(
-            self.pin_id, event, callback=callback, bouncetime=bouncetime, **kwargs)
+        raise self.abstract
 
     def on_rising(self, *args, **kwargs):
         self.on_interrupt(GPIO.RISING, *args, **kwargs)
@@ -77,3 +84,28 @@ class Pin(object):
 
     def on_both(self, *args, **kwargs):
         self.on_interrupt(GPIO.BOTH, *args, **kwargs)
+
+
+class Pin(GenericPin):
+    def setup(self, mode, *args, **kwargs):
+        super(Pin, self).setup(*args, **kwargs)
+        GPIO.setup(self.pin_id, mode, *args, **kwargs)
+
+    @property
+    @assert_input
+    def value(self) -> bool:
+        return GPIO.input(self.pin_id)
+
+    @value.setter
+    @assert_output
+    def value(self, value: bool):
+        GPIO.output(self.pin_id, value)
+
+    @assert_input
+    def wait(self, event):
+        GPIO.wait_for_edge(self.pin_id, event)
+
+    @assert_input
+    def on_interrupt(self, event, callback, bouncetime=100, **kwargs):
+        GPIO.add_event_detect(
+            self.pin_id, event, callback=callback, bouncetime=bouncetime, **kwargs)

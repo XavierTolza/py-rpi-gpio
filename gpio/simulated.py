@@ -1,2 +1,9 @@
 class SimulatedGPIO(object):
-    pass
+    IN = "INPUT"
+    OUT = "OUTPUT"
+    FALLING = "FALLING"
+    RISING = "RISING"
+    BOARD = "BOARD"
+
+    def setmode(self, *args, **kwargs):
+        pass

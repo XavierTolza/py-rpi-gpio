@@ -24,7 +24,7 @@ SOFTWARE.
 import setuptools
 
 setuptools.setup(
-    name='pyrpigpio',
+    name='gpio',
     version='1.0.0',
     author='Xavier TOLZA',
     author_email='tolza.xavier@gmail.com',
