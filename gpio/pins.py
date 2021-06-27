@@ -10,11 +10,13 @@ class Pins(list):
 
     @values.setter
     def values(self, value: [bool]):
-        if type(value) == int:
-            value = ((value >> i) % 2 for i in range(floor(log(5) / log(2)) + 1))
-        elif type(value) != list:
-            value = (value for _ in self)
-        for i, v in zip(self, value):
+        vtype = type(value)
+        if vtype == int:
+            values = ((value >> i) % 2 for i in range(floor(log(5) / log(2)) + 1))
+        elif vtype != list:
+            values = (value for _ in self)
+            
+        for i, v in zip(self, values):
             i.values = v
 
     def set_output(self, **kwargs):

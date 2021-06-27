@@ -1,3 +1,4 @@
+from gpio.error import InvalidPinError
 from .controller import gpio as GPIO
 from .decorators import assert_input, assert_output
 
@@ -90,8 +91,12 @@ class GenericPin(object):
 
 class Pin(GenericPin):
     def setup(self, mode, *args, **kwargs):
-        super(Pin, self).setup(*args, **kwargs)
-        GPIO.setup(self.pin_id, mode, *args, **kwargs)
+        super(Pin, self).setup(mode, *args, **kwargs)
+        try:
+            GPIO.setup(self.pin_id, mode, *args, **kwargs)
+        except ValueError as e:
+            if "channel sent is invalid" in str(e):
+                raise InvalidPinError(f"Pin {self.pin_id} is invalid on Rapsberry Pi")
 
     @property
     @assert_input

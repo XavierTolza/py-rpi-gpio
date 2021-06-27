@@ -6,3 +6,7 @@ class PinException(GPIOException):
 
 class PinDirectionError(PinException):
     pass
+
+
+class InvalidPinError(PinException):
+    pass

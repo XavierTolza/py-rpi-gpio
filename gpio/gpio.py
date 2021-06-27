@@ -11,7 +11,7 @@ class GPIO(object):
         if issubclass(type(pin_id), list):
             return Pins(self[i] for i in pin_id)
         else:
-            return Pin(self, pin_id)
+            return Pin(pin_id)
 
     def apply_on_many_pins(self, method, **pin_ids_values):
         for pin_id, value in pin_ids_values.items():
