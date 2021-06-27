@@ -9,6 +9,8 @@ class GenericPin(object):
     OUTPUT = GPIO.OUT
     FALLING = GPIO.FALLING
     RISING = GPIO.RISING
+    ON = True
+    OFF = False
 
     def __init__(self, pin_id):
         self._pin_id = pin_id
